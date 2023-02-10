@@ -95,7 +95,7 @@ if ($conexion) {
     <head>
         <title>Pedidos</title>
         <style>
-table {
+            table {
                 text-align: center;
                 background-color: royalblue;
                 color: white;
@@ -116,6 +116,15 @@ table {
                 font-size: 20px;
             }
             #art:hover {
+                background-color: #2EB0FF;
+                font-size: 20px;
+            }
+            .cantidad {
+                border: #4141e1;
+                padding: 0.25em;
+                font-size: 20px;
+            }
+            .cantidad:hover {
                 background-color: #2EB0FF;
                 font-size: 20px;
             }
