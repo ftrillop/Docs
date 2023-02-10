@@ -1,0 +1,4 @@
+■ Leer la base de datos cuando pintamos el stock.
+■ Poner avisos.
+■ Usar direccion como correo e implementar email.,
+■ Implementar PDF, XML, JSON

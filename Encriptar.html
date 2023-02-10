@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Encriptacion Cesar</title>
+    </head>
+    <body>
+        <h1>Encriptado y desencriptado C&eacute;sar</h1>
+        <form action="Encriptar.php" method="post">
+            <label for="mensaje">Escriba el texto a encriptar o desencriptar</label><br>
+            <textarea name="mensaje" cols="52" rows="10"></textarea>
+            <fieldset>
+            <legend>Elija lo que desea</legend>
+            <input type="radio" id="encriptar" name="metodo" value="Encriptar">
+            <label for="encriptar">Encriptar</label>
+            <input type="radio" id="desencriptar" name="metodo" value="Desencriptar">
+            <label for="desencriptar">Desencriptar</label><br><br>
+            </fieldset>
+            <label for="clave">Escriba la clave </label>
+            <input type="number" id="clave" name="clave"><br>
+            <input type="submit" value="Enviar">
+        </form>
+        
+    </body>
+</html>
