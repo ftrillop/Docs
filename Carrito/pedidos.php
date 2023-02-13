@@ -96,6 +96,7 @@ if ($conexion) {
         <title>Pedidos</title>
         <style>
             table {
+                margin-right: 30%;
                 text-align: center;
                 background-color: royalblue;
                 color: white;
@@ -242,7 +243,7 @@ if ($conexion) {
                 text-align: center;
                 width: fit-content;
                 padding: 2em;
-                margin-left: 40%;
+                margin-left: 30%;
                 margin-top: 5%;
             }
             #aceptar {
@@ -254,12 +255,16 @@ if ($conexion) {
             }
             #recibo {
                 border: 1px solid black;
+                margin-left: 45%;
+                background-color: blue;
                 text-decoration: none;
-                color: black;
-                border-radius: 15%;
+                color: white;
                 padding: 0.5%;
                 font-size: 18px;
                 font-weight: 900;
+            }
+            #recibo:hover {
+                background-color: lightskyblue;
             }
         </style>
     </head>
@@ -317,6 +322,7 @@ if ($conexion) {
                     $demasiados = false;
                 }
                 if (mysqli_num_rows($consulta)>0) {
+                    echo "<br><br>";
                     echo "<a id='recibo' href='pdfPedidos.php'>Generar recibo</a>";
                     $_SESSION["hayPedido"] = "true";
                 }
