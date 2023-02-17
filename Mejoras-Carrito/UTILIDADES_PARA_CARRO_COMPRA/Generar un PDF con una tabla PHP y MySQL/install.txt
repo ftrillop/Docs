@@ -1,0 +1,8 @@
+Pasos para la instalación:
+
+1.- Descomprimir el fichero ZIP
+2.- Crear una base de datos en PHPMyAdmin u otro gestor
+3.- Importar el fichero "cliente.sql" en la base de datos que se desea trabajar. Sin embargo, en archivo se encuentra en la "DATABASE_SQL/cliente.sql"
+4.- Editar el Fichero "Conexion.php", en este archivo se tiene que colocar las credenciales de MySQL.
+
+Es todo y a disfrutar del Script.

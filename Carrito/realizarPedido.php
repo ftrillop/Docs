@@ -1,5 +1,4 @@
 <?php
-use PHPMailer;
 session_start();
 $usuario = 0;
 if (!isset($_SESSION["CodRes"])) {
@@ -7,7 +6,7 @@ if (!isset($_SESSION["CodRes"])) {
 } else {
     $usuario = $_SESSION["CodRes"];
 }
-require '../vendor/autoload.php';
+require 'PHPMailer/PHPMailerAutoload.php';
 
 ?>
 <html>
@@ -44,15 +43,17 @@ require '../vendor/autoload.php';
         $conexion = new mysqli("127.0.0.1", "root", "", "pedidos");
         $CodPed = "";
         $productos = [];
+        $cod_productos = [];
         if ($conexion) {
-            $sql = "SELECT CodProd, Stock FROM productos";
+            $sql = "SELECT CodProd, Nombre, Stock FROM productos";
             $consulta = mysqli_query($conexion, $sql);
             if ($consulta) {
                 $fila = $consulta->fetch_assoc();
                 while ($fila) {
                     if (isset($_SESSION["art".$fila["CodProd"]])) {
                         if ($_SESSION["art".$fila["CodProd"]] > 0) {
-                            $productos[$fila["CodProd"]] = $_SESSION["art".$fila["CodProd"]];
+                            $productos[$fila["Nombre"]] = $_SESSION["art".$fila["CodProd"]];
+                            $cod_productos[$fila["Nombre"]] = $fila["CodProd"];
                         }
                     }
                     $fila = $consulta->fetch_assoc();
@@ -68,11 +69,11 @@ require '../vendor/autoload.php';
                 $CodPed = mysqli_insert_id($conexion);
                 $contador = 0;
                 foreach ($productos as $indice=>$valor) {
-                    $sql = "SELECT * FROM productos WHERE CodProd='$indice' AND Stock>='$valor'";
+                    $sql = "SELECT * FROM productos WHERE Nombre='$indice' AND Stock>='$valor'";
                     $consulta = mysqli_query($conexion, $sql);
                     $fila = $consulta->fetch_assoc();
                     if (mysqli_num_rows($consulta)>0) {
-                        $sql = "INSERT INTO pedidosproductos (CodPed, CodProd, Unidades) VALUES ($CodPed,$indice,$valor)";
+                        $sql = "INSERT INTO pedidosproductos (CodPed, CodProd, Unidades) VALUES ($CodPed,".$cod_productos[$indice].",$valor)";
                         $consulta = mysqli_query($conexion, $sql);
                         if (!$consulta) {
                             $conexion->rollback();
@@ -99,33 +100,29 @@ require '../vendor/autoload.php';
                         $nombre = $fila["Correo"];
                         $mensaje = "Se ha realizado un pedido de los siguiente artículos:";
                         foreach ($productos as $indice=>$valor){
-                            $mensaje .= "\n■ $valor";
+                            $mensaje .= "\n■$indice => $valor";
                         }
 
                         date_default_timezone_set('Etc/UTC');
-                        require '../vendor/autoload.php';
                         
-                        $mail = new PHPMailer;
-                        $mail->isSMTP();
-                        $mail->Host = 'localhost';
-                        $mail->Port = 25;
+                        $mail = new PHPMailer();
+                        $mail->IsSMTP();
+                        $mail->From = "asdfgptp@gmail.com";
+                        $mail->SMTPAuth = true;
+                        $mail->SMTPSecure = 'tls';
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->Port = 587;
+                        $mail->Username = 'asdfgptp@gmail.com';
+                        $mail->Password = 'ftcxliugchurtqcx';
 
-                        $mail->setFrom('asdfgpt@gmail.com', 'Servicio de mensajería');
-                        $mail->addAddress("fertrillop@gmail.com", $nombre);
+                        $mail->addAddress('fertrillop@gmail.com');
+                        $mail->Subject = 'Pedidos que has hecho';
+                        $mail->Body = $mensaje;
 
-                        if ($mail->addReplyTo($destinatario, $nombre)) {
-                            $mail->isHTML(false);
-
-                            $mail->Body = <<<EOT
-                            Email: {$destinatario}
-                            Name: {$nombre}
-                            Message: {$mensaje}
-                            EOT;
-                            if ($mail->send()) {
-                                echo "Se ha enviado el mensaje correctamente";
-                            } else {
-                                echo "No se pudo enviar el mensaje";
-                            }
+                        if ($mail->Send()) {
+                            echo "Se ha enviado el correo";
+                        } else {
+                            echo "No se ha enviado el correo";
                         }
                     }
 
